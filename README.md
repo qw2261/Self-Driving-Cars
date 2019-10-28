@@ -12,6 +12,10 @@ You’ll learn from a highly realistic driving environment that features 3D pede
 
 It is recommended that you have some background in linear algebra, probability, statistics, calculus, physics, control theory, and Python programming. You will need these specifications in order to effectively run the CARLA simulator: Windows 7 64-bit (or later) or Ubuntu 16.04 (or later), Quad-core Intel or AMD processor (2.5 GHz or faster), NVIDIA GeForce 470 GTX or AMD Radeon 6870 HD series card or higher, 8 GB RAM, and OpenGL 3 or greater (for Linux computers).
 
+
+
+
+
 ## Week 1. 
 
 ### Module 0: Welcome to the Self-Driving Cars Specialization
@@ -82,7 +86,11 @@ It is recommended that you have some background in linear algebra, probability, 
 
 1925 - Remote Control Car
 
-####Glossary of Terms
+
+
+
+
+#### Glossary of Terms
 
 ACC: Adaptive Cruise Control
 
@@ -199,6 +207,10 @@ Winston, Zoox
 Andy, Zoox
 
 Paul Newman, Oxbotica
+
+
+
+
 
 ### Module 1. Autonomy Requirements
 
@@ -359,4 +371,208 @@ Supplementary Reading: Driving Decisions and Actions
 If you're curious about motion planning and other high-level behaviour, check out [Frazzioli’s Survey for Autonomous Planning](https://arxiv.org/pdf/1604.07446.pdf).
 
 This paper, [Autonomous driving in urban environments: Boss and the Urban Challenge](https://onlinelibrary.wiley.com/doi/epdf/10.1002/rob.20255); discusses one of the very early mixed planning systems. It was also the winner of the DARPA Urban Challenge
+
+
+
+### Advice for Breaking into the Self-Driving Cars Industry
+
+
+
+## Week 2. 
+
+### Lesson 1: **Sensors and Computing Hardware** 
+
+Sensors
+
+- Sensor: device that measures or detects a property of the environment, or changes to a property 
+- Categorization:
+  - exteroceptive: extero = surroundings 
+  - proprioceptive: proprio = internal 
+
+
+
+Sensors for perception
+
+Camera (exteroceptive ):
+
+- Essential for correctly perceiving environment 
+- Comparison metrics: 
+  - Resolution 
+  - Field of view
+  - Dynamic range
+
+- Trade-off between resolution and FOV? 
+
+Stereo (exteroceptive ):
+
+- Enables depth estimation from image data 
+
+LIDAR (exteroceptive):
+
+- Detailed 3D scene geometry from LIDAR point cloud 
+- Comparison metrics: 
+  - Number of beams
+  - Points per second
+  - Rotation rate
+  - Field of view
+- Upcoming: Solid state LIDAR! 
+
+RADAR (exteroceptive ):
+
+- Robust Object Detection and Relative Speed Estimation 
+- Comparison metrics: 
+  - range 
+  - field of view
+  - position and speed accuracy 
+- Configurations:
+  - WFOV, short range 
+  - NFOV, long range 
+
+Ultrasonics (exteroceptive ):
+
+- Short-range all-weather distance measurement 
+- Ideal for low-cost parking solutions
+- Unaffected by lighting, precipitation 
+- Comparison metrics: 
+  - Range
+  - Field of view
+  - Cost
+
+GNSS/IMU (proprioceptive):
+
+- Global Navigation Satellite Systems and Inertial measurement units 
+- Direct measure of ego vehicle states 
+  - Direct measure of ego vehicle states 
+    - position, velocity (GNSS)
+      - Varying accuracies: RTK, PPP, DGPS 
+    - angular rotation rate (IMU) 
+    - acceleration (IMU)
+    - heading (IMU, GPS) 
+
+Wheel Odometry (proprioceptive):
+
+- Tracks wheel velocities and orientation 
+- Uses these to calculate overall speed and orientation of car
+  - speed accuracy 
+  - position drift 
+
+
+
+Computing Hardware 
+
+- Need a “self-driving brain” 
+  - Takes in all sensor data 
+  - Computes actions
+  - Already existing advanced systems that do self driving car processing (e.g. Drive PX/AGX, Intel & Mobileye EyeQ) 
+-  Image processing, Object detection, Mapping 
+  - GPUs - Graphic Processing Unit 
+  - FPGAs - Field Programmable Gate Array
+  - ASICs - Application Specific Integrated Chip 
+- Synchronization Hardware 
+  - To synchronize different modules and provide a common clock 
+
+
+
+Summary
+
+- Sensors - exteroceptive and proprioceptive 
+  - camera, LIDAR, RADAR, ultrasonics, GNSS, IMU, wheel odometry 
+- Self-driving computing hardware 
+
+
+
+### Lesson 2: Hardware Configuration Design 
+
+Where to place sensors? 
+
+- Need sensors to support maneuvers within our ODD
+
+- Broadly, we have two driving environments 
+
+![](/Users/wangqi/Desktop/Courses/2019下半年/Self-Driving-Cars/Lectures/Week_2/assets/1.png)
+
+
+
+Highway Analysis 
+
+- Broadly, 3 kinds of maneuvers:
+- Emergency Stop
+- Maintain Speed
+- Lane Change 
+
+
+
+Highway Analysis: Emergency Stop
+
+- If there is a blockage ahead, we want to stop in time. 
+- **Longitudinal Coverage**: 
+  - Assume we are speeding at 120 kmph
+  - Stopping distance could be ~110 metres; *aggressive deceleration* 
+
+
+
+Highway Analysis: Emergency Stop 
+
+- To avoid collision, either we stop or change lanes. 
+- **Lateral Coverage**: 
+  - At least adjacent lanes, since we may change lanes to avoid a hard stop
+
+
+
+Highway Analysis: Maintain Speed 
+
+- Relative speeds are typically less than 30 kmph
+
+- **Longitudinal coverage**
+  - At least ~100 metres in front
+  - Both vehicles are moving, so don’t need to look as far as emergency-stop case
+
+
+
+Highway Analysis: Maintain speed with Merge 
+
+- **Lateral Coverage**: 
+  - Usually current lane 
+  - Adjacent lanes would be preferred for merging vehicle detection
+
+
+
+Highway Analysis: Lane Change 
+
+- Consider this possible lane change scenario: 
+  - Intended lane change 
+
+
+
+Highway Analysis: Lane Change 
+
+- Longitudinal coverage: Need to look forward to maintain a safe distance 
+- Need to look behind to see what rear vehicles are doing
+
+
+
+Highway Analysis: Lane Change 
+
+- Laterally, we need to look not just in the adjacent lanes, but probably further
+- Lateral coverage: Need wider sensing
+
+
+
+Supplementary Reading: Hardware Configuration Design
+
+To learn more about sensing requirements for automated vehicles for highway and rural environments, check out [K.J. Bussemaker's master's thesis](https://repository.tudelft.nl/islandora/object/uuid:2ae44ea2-e5e9-455c-8481-8284f8494e4e).
+
+
+
+### Lesson 3: Software Architecture 
+
+
+
+
+
+
+
+Supplementary Reading: Software Architecture
+
+Learn more about AV software architecture from the Team VictorTango - [DARPA Urban Challenge Technical Paper](https://pdfs.semanticscholar.org/c10a/cd8c64790f7d040ea6f01d7b26b1d9a442db.pdf).
 
